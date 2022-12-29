@@ -46,7 +46,7 @@ public unsafe class RenderContext
             MultiSampleQuality = 0,
             MultiSampleType = MultisampleType.MultisampleNone
         };
-        direct3D9->CreateDeviceEx(0, Devtype.Hal, 0, D3D9.CreateHardwareVertexprocessing | D3D9.CreateMultithreaded | D3D9.CreatePuredevice, ref presentParameters, (Displaymodeex*)IntPtr.Zero, &device);
+        direct3D9->CreateDeviceEx(D3D9.AdapterDefault, Devtype.Hal, 0, D3D9.CreateHardwareVertexprocessing | D3D9.CreateMultithreaded | D3D9.CreatePuredevice, ref presentParameters, (Displaymodeex*)IntPtr.Zero, &device);
 
         DxDeviceHandle = (IntPtr)device;
 

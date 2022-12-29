@@ -19,10 +19,9 @@ public unsafe class Framebuffer
         FramebufferWidth = framebufferWidth;
         FramebufferHeight = framebufferHeight;
 
-        IDirect3DTexture9* texture;
         IDirect3DSurface9* surface;
-        context.Device->CreateTexture((uint)FramebufferWidth, (uint)FramebufferHeight, 1, D3D9.UsageRendertarget, context.Format, Pool.Default, &texture, null);
-        texture->GetSurfaceLevel(0, &surface);
+        context.Device->CreateRenderTarget((uint)FramebufferWidth, (uint)FramebufferHeight, context.Format, MultisampleType.MultisampleNone, 0, 0, &surface, null);
+        context.Device->SetRenderTarget(0, surface);
 
         D3dImage = new D3DImage();
         D3dImage.Lock();

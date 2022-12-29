@@ -57,4 +57,9 @@ public unsafe class GameControl : GameBase
             _lastFrameStamp = curFrameStamp;
         }
     }
+
+    public static Format MakeFourCC(byte c1, byte c2, byte c3, byte c4)
+    {
+        return (Format)((((((c4 << 8) | c3) << 8) | c2) << 8) | c1);
+    }
 }
