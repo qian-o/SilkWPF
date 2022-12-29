@@ -9,8 +9,8 @@
         Title="MainWindow"
         Height="450"
         Width="800">
-    <Grid>
+    <UniformGrid Rows="1">
         <sampleD3D:MiniTri />
         <sampleGL:Materials />
-    </Grid>
+    </UniformGrid>
 </Window>
