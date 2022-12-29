@@ -1,0 +1,16 @@
+﻿<Window x:Class="SilkWPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:sampleD3D="clr-namespace:SilkWPF.Direct3D9.Sample"
+        xmlns:sampleGL="clr-namespace:SilkWPF.OpenGL.Sample"
+        mc:Ignorable="d"
+        Title="MainWindow"
+        Height="450"
+        Width="800">
+    <Grid>
+        <sampleD3D:MiniTri />
+        <sampleGL:Materials />
+    </Grid>
+</Window>
