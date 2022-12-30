@@ -1,10 +1,10 @@
 ﻿using Silk.NET.Direct3D9;
 using Silk.NET.Maths;
+using SilkWPF.Common;
 using System.Diagnostics;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Windows.Controls;
-using System.Windows.Media;
 
 namespace SilkWPF.Direct3D9.Sample;
 
@@ -23,9 +23,9 @@ public unsafe partial class MiniTri : UserControl
     private readonly Stopwatch _stopwatch = Stopwatch.StartNew();
     private readonly Vertex[] _vertices =
     {
-        new Vertex() { Color = (uint)GameControl.ColorToBgra(Colors.Red), Position = new Vector4(400.0f, 100.0f, 0.5f, 1.0f) },
-        new Vertex() { Color = (uint)GameControl.ColorToBgra(Colors.Blue), Position = new Vector4(650.0f, 500.0f, 0.5f, 1.0f) },
-        new Vertex() { Color = (uint)GameControl.ColorToBgra(Colors.Green), Position = new Vector4(150.0f, 500.0f, 0.5f, 1.0f) }
+        new Vertex() { Color = (uint)SilkColor.Red.ToBgra(), Position = new Vector4(400.0f, 100.0f, 0.5f, 1.0f) },
+        new Vertex() { Color = (uint)SilkColor.Blue.ToBgra(), Position = new Vector4(650.0f, 500.0f, 0.5f, 1.0f) },
+        new Vertex() { Color = (uint)SilkColor.Green.ToBgra(), Position = new Vector4(150.0f, 500.0f, 0.5f, 1.0f) }
     };
     private readonly Vertexelement9[] _vertexelements =
     {
@@ -66,8 +66,9 @@ public unsafe partial class MiniTri : UserControl
     private void Game_Render(TimeSpan obj)
     {
         float hue = (float)_stopwatch.Elapsed.TotalSeconds * 0.15f % 1;
+        Vector4 vector = new(1.0f * hue, 1.0f * 0.75f, 1.0f * 0.75f, 1.0f);
 
-        Game.Device->Clear(0, null, D3D9.ClearTarget, (uint)GameControl.ColorToBgra(GameControl.HsvToColor(new Vector4(1.0f * hue, 1.0f * 0.75f, 1.0f * 0.75f, 1.0f))), 1.0f, 0);
+        Game.Device->Clear(0, null, D3D9.ClearTarget, (uint)SilkColor.FromHsv(vector).ToBgra(), 1.0f, 0);
         Game.Device->BeginScene();
 
         Game.Device->SetStreamSource(0, _ppVertexBuffer, 0, 20);

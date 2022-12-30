@@ -10,7 +10,23 @@
         Height="450"
         Width="800">
     <UniformGrid Rows="1">
-        <sampleD3D:MiniTri />
-        <sampleGL:Materials />
+        <Grid>
+            <sampleD3D:MiniTri />
+            <TextBlock HorizontalAlignment="Left"
+                       VerticalAlignment="Top"
+                       Margin="10,10,0,0"
+                       FontSize="20"
+                       Foreground="Aquamarine"
+                       Text="Direct3D9" />
+        </Grid>
+        <Grid>
+            <sampleGL:Materials />
+            <TextBlock HorizontalAlignment="Left"
+                       VerticalAlignment="Top"
+                       Margin="10,10,0,0"
+                       FontSize="20"
+                       Foreground="Aquamarine"
+                       Text="OpenGL" />
+        </Grid>
     </UniformGrid>
 </Window>
