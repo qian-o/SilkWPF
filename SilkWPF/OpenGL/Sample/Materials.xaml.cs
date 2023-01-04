@@ -88,7 +88,8 @@ public partial class Materials : UserControl
 
     private void Game_Ready()
     {
-        GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        Random random = new();
+        GL.ClearColor((float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble(), 1.0f);
 
         GL.Enable(EnableCap.DepthTest);
 

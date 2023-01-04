@@ -8,7 +8,8 @@
         mc:Ignorable="d"
         Title="MainWindow"
         Height="450"
-        Width="800">
+        Width="800"
+        Loaded="Window_Loaded">
     <TabControl>
         <TabItem Header="Direct3D9">
             <UniformGrid Rows="2"
@@ -20,13 +21,9 @@
             </UniformGrid>
         </TabItem>
         <TabItem Header="OpenGL">
-            <UniformGrid Rows="2"
-                         Columns="2">
-                <sampleGL:Materials />
-                <sampleGL:Materials />
-                <sampleGL:Materials />
-                <sampleGL:Materials />
-            </UniformGrid>
+            <UniformGrid x:Name="GL"
+                         Rows="2"
+                         Columns="2" />
         </TabItem>
     </TabControl>
 </Window>
