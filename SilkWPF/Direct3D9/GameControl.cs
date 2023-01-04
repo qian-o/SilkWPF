@@ -6,10 +6,9 @@ using Rect = System.Windows.Rect;
 
 namespace SilkWPF.Direct3D9;
 
-public unsafe class GameControl : GameBase
+public unsafe class GameControl : GameBase<Framebuffer>
 {
     private RenderContext _context;
-    private Framebuffer _framebuffer;
 
     public IDirect3DDevice9Ex* Device { get; private set; }
     public Format Format { get; private set; }
@@ -34,29 +33,23 @@ public unsafe class GameControl : GameBase
     {
         if (_context != null && sizeInfo.NewSize.Width > 0 && sizeInfo.NewSize.Height > 0)
         {
-            _framebuffer = new Framebuffer(_context, (int)sizeInfo.NewSize.Width, (int)sizeInfo.NewSize.Height);
+            Framebuffer?.Dispose();
+            Framebuffer = new Framebuffer(_context, (int)sizeInfo.NewSize.Width, (int)sizeInfo.NewSize.Height);
         }
     }
 
     protected override void OnDraw(DrawingContext drawingContext)
     {
-        if (_framebuffer != null)
-        {
-            TimeSpan curFrameStamp = _stopwatch.Elapsed;
+        Framebuffer.D3dImage.Lock();
 
-            _framebuffer.D3dImage.Lock();
+        Render?.Invoke(_stopwatch.Elapsed - _lastFrameStamp);
 
-            Render?.Invoke(curFrameStamp - _lastFrameStamp);
+        Framebuffer.D3dImage.AddDirtyRect(new Int32Rect(0, 0, Framebuffer.FramebufferWidth, Framebuffer.FramebufferHeight));
+        Framebuffer.D3dImage.Unlock();
 
-            _framebuffer.D3dImage.AddDirtyRect(new Int32Rect(0, 0, _framebuffer.FramebufferWidth, _framebuffer.FramebufferHeight));
-            _framebuffer.D3dImage.Unlock();
+        Rect rect = new(0, 0, Framebuffer.D3dImage.Width, Framebuffer.D3dImage.Height);
+        drawingContext.DrawImage(Framebuffer.D3dImage, rect);
 
-            Rect rect = new(0, 0, _framebuffer.D3dImage.Width, _framebuffer.D3dImage.Height);
-            drawingContext.DrawImage(_framebuffer.D3dImage, rect);
-
-            UpdateFrame?.Invoke(this, curFrameStamp - _lastFrameStamp);
-
-            _lastFrameStamp = curFrameStamp;
-        }
+        UpdateFrame?.Invoke(this, _stopwatch.Elapsed - _lastFrameStamp);
     }
 }

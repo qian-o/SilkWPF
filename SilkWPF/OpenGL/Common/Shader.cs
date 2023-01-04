@@ -118,6 +118,11 @@ public class Shader
         GL.UseProgram(Handle);
     }
 
+    public void Discard()
+    {
+        GL.UseProgram(0);
+    }
+
     // The shader sources provided with this project use hardcoded layout(location)-s. If you want to do it dynamically,
     // you can omit the layout(location=X) lines in the vertex shader, and use this in VertexAttribPointer instead of the hardcoded values.
     public int GetAttribLocation(string attribName)

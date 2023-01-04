@@ -2,18 +2,19 @@
 using OpenTK.Graphics.Wgl;
 using OpenTK.Platform.Windows;
 using Silk.NET.Direct3D9;
+using SilkWPF.Common;
 using System.Windows.Interop;
 using System.Windows.Media;
 
 namespace SilkWPF.OpenGL;
 
-public unsafe class Framebuffer : IDisposable
+public unsafe class Framebuffer : FramebufferBase
 {
     public RenderContext Context { get; }
 
-    public int FramebufferWidth { get; }
+    public override int FramebufferWidth { get; }
 
-    public int FramebufferHeight { get; }
+    public override int FramebufferHeight { get; }
 
     public int GLFramebufferHandle { get; }
 
@@ -23,9 +24,7 @@ public unsafe class Framebuffer : IDisposable
 
     public IntPtr DxInteropRegisteredHandle { get; }
 
-    public D3DImage D3dImage { get; }
-
-    public IntPtr Surface { get; set; }
+    public override D3DImage D3dImage { get; }
 
     public TranslateTransform TranslateTransform { get; }
 
@@ -60,12 +59,15 @@ public unsafe class Framebuffer : IDisposable
         GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 
         D3dImage = new D3DImage();
-        Surface = (IntPtr)surface;
+        D3dImage.Lock();
+        D3dImage.SetBackBuffer(D3DResourceType.IDirect3DSurface9, (IntPtr)surface);
+        D3dImage.Unlock();
+
         TranslateTransform = new TranslateTransform(0, FramebufferHeight);
         FlipYTransform = new ScaleTransform(1, -1);
     }
 
-    public void Dispose()
+    public override void Dispose()
     {
         GL.DeleteFramebuffer(GLFramebufferHandle);
         GL.DeleteRenderbuffer(GLDepthRenderBufferHandle);

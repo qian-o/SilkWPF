@@ -15,7 +15,7 @@ public class Settings
 
     public IGraphicsContext ContextToUse { get; set; }
 
-    internal static bool WouldResultInSameContext([NotNull] Settings a, [NotNull] Settings b)
+    public static bool WouldResultInSameContext([NotNull] Settings a, [NotNull] Settings b)
     {
         if (a.MajorVersion != b.MajorVersion)
         {

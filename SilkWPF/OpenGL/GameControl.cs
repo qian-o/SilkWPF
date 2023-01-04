@@ -2,15 +2,13 @@
 using OpenTK.Graphics.Wgl;
 using SilkWPF.Common;
 using System.Windows;
-using System.Windows.Interop;
 using System.Windows.Media;
 
 namespace SilkWPF.OpenGL;
 
-public class GameControl : GameBase
+public class GameControl : GameBase<Framebuffer>
 {
     private RenderContext _context;
-    private Framebuffer _framebuffer;
 
     public Settings Setting { get; set; } = new Settings();
 
@@ -32,42 +30,36 @@ public class GameControl : GameBase
     {
         if (_context != null && sizeInfo.NewSize.Width > 0 && sizeInfo.NewSize.Height > 0)
         {
-            _framebuffer?.Dispose();
-            _framebuffer = new Framebuffer(_context, (int)sizeInfo.NewSize.Width, (int)sizeInfo.NewSize.Height);
+            Framebuffer?.Dispose();
+            Framebuffer = new Framebuffer(_context, (int)sizeInfo.NewSize.Width, (int)sizeInfo.NewSize.Height);
         }
     }
 
     protected override void OnDraw(DrawingContext drawingContext)
     {
-        if (_framebuffer != null)
-        {
-            TimeSpan curFrameStamp = _stopwatch.Elapsed;
+        Framebuffer.D3dImage.Lock();
 
-            _framebuffer.D3dImage.Lock();
-            Wgl.DXLockObjectsNV(_context.GlDeviceHandle, 1, new[] { _framebuffer.DxInteropRegisteredHandle });
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, _framebuffer.GLFramebufferHandle);
-            GL.Viewport(0, 0, _framebuffer.FramebufferWidth, _framebuffer.FramebufferHeight);
+        Wgl.DXLockObjectsNV(_context.GlDeviceHandle, 1, new[] { Framebuffer.DxInteropRegisteredHandle });
+        GL.BindFramebuffer(FramebufferTarget.Framebuffer, Framebuffer.GLFramebufferHandle);
 
-            Render?.Invoke(curFrameStamp - _lastFrameStamp);
+        GL.Viewport(0, 0, Framebuffer.FramebufferWidth, Framebuffer.FramebufferHeight);
+        Render?.Invoke(_stopwatch.Elapsed - _lastFrameStamp);
 
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
-            Wgl.DXUnlockObjectsNV(_context.GlDeviceHandle, 1, new[] { _framebuffer.DxInteropRegisteredHandle });
-            _framebuffer.D3dImage.SetBackBuffer(D3DResourceType.IDirect3DSurface9, _framebuffer.Surface);
-            _framebuffer.D3dImage.AddDirtyRect(new Int32Rect(0, 0, _framebuffer.FramebufferWidth, _framebuffer.FramebufferHeight));
-            _framebuffer.D3dImage.Unlock();
+        GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+        Wgl.DXUnlockObjectsNV(_context.GlDeviceHandle, 1, new[] { Framebuffer.DxInteropRegisteredHandle });
 
-            drawingContext.PushTransform(_framebuffer.TranslateTransform);
-            drawingContext.PushTransform(_framebuffer.FlipYTransform);
+        Framebuffer.D3dImage.AddDirtyRect(new Int32Rect(0, 0, Framebuffer.FramebufferWidth, Framebuffer.FramebufferHeight));
+        Framebuffer.D3dImage.Unlock();
 
-            Rect rect = new(0, 0, _framebuffer.D3dImage.Width, _framebuffer.D3dImage.Height);
-            drawingContext.DrawImage(_framebuffer.D3dImage, rect);
+        drawingContext.PushTransform(Framebuffer.TranslateTransform);
+        drawingContext.PushTransform(Framebuffer.FlipYTransform);
 
-            drawingContext.Pop();
-            drawingContext.Pop();
+        Rect rect = new(0, 0, Framebuffer.D3dImage.Width, Framebuffer.D3dImage.Height);
+        drawingContext.DrawImage(Framebuffer.D3dImage, rect);
 
-            UpdateFrame?.Invoke(this, curFrameStamp - _lastFrameStamp);
+        drawingContext.Pop();
+        drawingContext.Pop();
 
-            _lastFrameStamp = curFrameStamp;
-        }
+        UpdateFrame?.Invoke(this, _stopwatch.Elapsed - _lastFrameStamp);
     }
 }

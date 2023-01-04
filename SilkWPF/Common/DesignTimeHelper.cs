@@ -1,11 +1,12 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace SilkWPF.Common;
 
 public static class DesignTimeHelper
 {
-    public static void DrawDesign(GameBase control, DrawingContext drawingContext)
+    public static void DrawDesign(Control control, DrawingContext drawingContext)
     {
         if (control.Visibility == Visibility.Visible && control.ActualWidth > 0 && control.ActualHeight > 0)
         {

@@ -4,11 +4,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:sampleD3D="clr-namespace:SilkWPF.Direct3D9.Sample"
+        xmlns:sampleGL="clr-namespace:SilkWPF.OpenGL.Sample"
         mc:Ignorable="d"
         Title="MainWindow"
         Height="450"
-        Width="800"
-        Loaded="Window_Loaded">
+        Width="800">
     <TabControl>
         <TabItem Header="Direct3D9">
             <UniformGrid Rows="2"
@@ -19,10 +19,20 @@
                 <sampleD3D:MiniTri />
             </UniformGrid>
         </TabItem>
-        <TabItem Header="OpenGL">
-            <UniformGrid x:Name="GL"
-                         Rows="2"
-                         Columns="2" />
+        <TabItem Header="OpenGL1">
+            <UniformGrid Rows="2"
+                         Columns="2">
+                <sampleGL:ExampleScene />
+                <sampleGL:ExampleScene />
+                <sampleGL:ExampleScene />
+                <sampleGL:ExampleScene />
+            </UniformGrid>
+        </TabItem>
+        <TabItem Header="OpenGL2">
+            <UniformGrid Rows="1"
+                         Columns="1">
+                <sampleGL:Materials />
+            </UniformGrid>
         </TabItem>
     </TabControl>
 </Window>

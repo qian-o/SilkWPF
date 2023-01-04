@@ -1,5 +1,6 @@
 ﻿using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
+using OpenTK.Windowing.Common;
 using SilkWPF.OpenGL.Common;
 using System.Windows;
 using System.Windows.Controls;
@@ -80,6 +81,12 @@ public partial class Materials : UserControl
     {
         InitializeComponent();
 
+        Game.Setting = new Settings()
+        {
+            MajorVersion = 4,
+            MinorVersion = 5,
+            GraphicsProfile = ContextProfile.Compatability
+        };
         Game.Ready += Game_Ready;
         Game.Render += Game_Render;
         Game.UpdateFrame += Game_UpdateFrame;
@@ -179,6 +186,9 @@ public partial class Materials : UserControl
         _lampShader.SetMatrix4("projection", _camera.GetProjectionMatrix());
 
         GL.DrawArrays(PrimitiveType.Triangles, 0, 36);
+
+        _lightingShader.Discard();
+        _lampShader.Discard();
     }
 
     private void Game_UpdateFrame(object arg1, TimeSpan arg2)
