@@ -7,9 +7,6 @@ using System.Windows.Input;
 
 namespace SilkWPF.OpenGL.Sample;
 
-/// <summary>
-/// Materials.xaml 的交互逻辑
-/// </summary>
 public partial class Materials : UserControl
 {
     const float cameraSpeed = 1.5f;

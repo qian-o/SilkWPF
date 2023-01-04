@@ -2,36 +2,27 @@
 using OpenTK.Graphics.Wgl;
 using SilkWPF.Common;
 using System.Windows;
+using System.Windows.Interop;
 using System.Windows.Media;
 
 namespace SilkWPF.OpenGL;
 
 public class GameControl : GameBase
 {
-    private readonly Settings _settings;
-
     private RenderContext _context;
     private Framebuffer _framebuffer;
+
+    public Settings Setting { get; set; } = new Settings();
 
     public override event Action Ready;
     public override event Action<TimeSpan> Render;
     public override event Action<object, TimeSpan> UpdateFrame;
 
-    public GameControl() : this(new Settings())
-    {
-
-    }
-
-    public GameControl(Settings settings)
-    {
-        _settings = settings;
-    }
-
     protected override void OnStart()
     {
         if (_context == null)
         {
-            _context = new RenderContext(_settings);
+            _context = new RenderContext(Setting);
 
             Ready?.Invoke();
         }
@@ -61,6 +52,7 @@ public class GameControl : GameBase
 
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
             Wgl.DXUnlockObjectsNV(_context.GlDeviceHandle, 1, new[] { _framebuffer.DxInteropRegisteredHandle });
+            _framebuffer.D3dImage.SetBackBuffer(D3DResourceType.IDirect3DSurface9, _framebuffer.Surface);
             _framebuffer.D3dImage.AddDirtyRect(new Int32Rect(0, 0, _framebuffer.FramebufferWidth, _framebuffer.FramebufferHeight));
             _framebuffer.D3dImage.Unlock();
 

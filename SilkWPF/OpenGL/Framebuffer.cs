@@ -25,6 +25,8 @@ public unsafe class Framebuffer : IDisposable
 
     public D3DImage D3dImage { get; }
 
+    public IntPtr Surface { get; set; }
+
     public TranslateTransform TranslateTransform { get; }
 
     public ScaleTransform FlipYTransform { get; }
@@ -58,10 +60,7 @@ public unsafe class Framebuffer : IDisposable
         GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 
         D3dImage = new D3DImage();
-        D3dImage.Lock();
-        D3dImage.SetBackBuffer(D3DResourceType.IDirect3DSurface9, (IntPtr)surface);
-        D3dImage.Unlock();
-
+        Surface = (IntPtr)surface;
         TranslateTransform = new TranslateTransform(0, FramebufferHeight);
         FlipYTransform = new ScaleTransform(1, -1);
     }

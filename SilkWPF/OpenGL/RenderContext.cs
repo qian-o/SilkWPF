@@ -9,6 +9,7 @@ namespace SilkWPF.OpenGL;
 public unsafe class RenderContext
 {
     private static IGraphicsContext _sharedContext;
+    private static Settings _sharedContextSettings;
     private static int _sharedContextReferenceCount;
 
     public Format Format { get; }
@@ -69,7 +70,21 @@ public unsafe class RenderContext
             windowSettings.WindowState = WindowState.Minimized;
             NativeWindow nativeWindow = new(windowSettings);
             Wgl.LoadBindings(new GLFWBindingsContext());
+
             _sharedContext = nativeWindow.Context;
+            _sharedContextSettings = settings;
+
+            _sharedContext.MakeCurrent();
+        }
+        else
+        {
+            if (!Settings.WouldResultInSameContext(settings, _sharedContextSettings))
+            {
+                throw new ArgumentException($"The provided {nameof(Settings)} would result" +
+                                                $"in a different context creation to one previously created. To fix this," +
+                                                $" either ensure all of your context settings are identical, or provide an " +
+                                                $"external context via the '{nameof(Settings.ContextToUse)}' field.");
+            }
         }
 
         Interlocked.Increment(ref _sharedContextReferenceCount);

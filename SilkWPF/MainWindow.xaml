@@ -9,24 +9,24 @@
         Title="MainWindow"
         Height="450"
         Width="800">
-    <UniformGrid Rows="1">
-        <Grid>
-            <sampleD3D:MiniTri />
-            <TextBlock HorizontalAlignment="Left"
-                       VerticalAlignment="Top"
-                       Margin="10,10,0,0"
-                       FontSize="20"
-                       Foreground="Aquamarine"
-                       Text="Direct3D9" />
-        </Grid>
-        <Grid>
-            <sampleGL:Materials />
-            <TextBlock HorizontalAlignment="Left"
-                       VerticalAlignment="Top"
-                       Margin="10,10,0,0"
-                       FontSize="20"
-                       Foreground="Aquamarine"
-                       Text="OpenGL" />
-        </Grid>
-    </UniformGrid>
+    <TabControl>
+        <TabItem Header="Direct3D9">
+            <UniformGrid Rows="2"
+                         Columns="2">
+                <sampleD3D:MiniTri />
+                <sampleD3D:MiniTri />
+                <sampleD3D:MiniTri />
+                <sampleD3D:MiniTri />
+            </UniformGrid>
+        </TabItem>
+        <TabItem Header="OpenGL">
+            <UniformGrid Rows="2"
+                         Columns="2">
+                <sampleGL:Materials />
+                <sampleGL:Materials />
+                <sampleGL:Materials />
+                <sampleGL:Materials />
+            </UniformGrid>
+        </TabItem>
+    </TabControl>
 </Window>
