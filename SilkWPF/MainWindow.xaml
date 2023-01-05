@@ -7,8 +7,9 @@
         xmlns:sampleGL="clr-namespace:SilkWPF.OpenGL.Sample"
         mc:Ignorable="d"
         Title="MainWindow"
-        Height="450"
-        Width="800">
+        Height="900"
+        Width="1600"
+        WindowStartupLocation="CenterScreen">
     <TabControl>
         <TabItem Header="Direct3D9">
             <UniformGrid Rows="2"
@@ -19,7 +20,7 @@
                 <sampleD3D:MiniTri />
             </UniformGrid>
         </TabItem>
-        <TabItem Header="OpenGL1">
+        <TabItem Header="OpenGL 1">
             <UniformGrid Rows="2"
                          Columns="2">
                 <sampleGL:ExampleScene />
@@ -28,7 +29,7 @@
                 <sampleGL:ExampleScene />
             </UniformGrid>
         </TabItem>
-        <TabItem Header="OpenGL2">
+        <TabItem Header="OpenGL 2">
             <UniformGrid Rows="1"
                          Columns="1">
                 <sampleGL:Materials />

@@ -2,6 +2,7 @@
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using SilkWPF.OpenGL.Common;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -95,9 +96,6 @@ public partial class Materials : UserControl
 
     private void Game_Ready()
     {
-        Random random = new();
-        GL.ClearColor((float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble(), 1.0f);
-
         GL.Enable(EnableCap.DepthTest);
 
         _vertexBufferObject = GL.GenBuffer();
@@ -136,10 +134,9 @@ public partial class Materials : UserControl
     {
         _camera.AspectRatio = (float)(ActualWidth / ActualHeight);
 
+        GL.ClearColor(0.5f, 0.5f, 0.5f, 1.0f);
         GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
         GL.BindVertexArray(_vaoModel);
-
         _lightingShader.Use();
 
         _lightingShader.SetMatrix4("model", Matrix4.Identity);

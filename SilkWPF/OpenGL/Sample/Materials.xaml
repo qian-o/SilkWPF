@@ -9,5 +9,11 @@
              d:DesignWidth="800">
     <Grid>
         <opengl:GameControl x:Name="Game" />
+        <TextBlock HorizontalAlignment="Left"
+                   VerticalAlignment="Top"
+                   Margin="5,5,0,0"
+                   FontSize="20"
+                   Foreground="Green"
+                   Text="{Binding ElementName=Game, Path=Fps}" />
     </Grid>
 </UserControl>
