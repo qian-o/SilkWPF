@@ -24,6 +24,8 @@ public unsafe class Framebuffer : FramebufferBase
 
     public IntPtr DxInteropRegisteredHandle { get; }
 
+    public override nint D3dSurface { get; }
+
     public override D3DImage D3dImage { get; }
 
     public TranslateTransform TranslateTransform { get; }
@@ -58,9 +60,10 @@ public unsafe class Framebuffer : FramebufferBase
         GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.StencilAttachment, RenderbufferTarget.Renderbuffer, GLDepthRenderBufferHandle);
         GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 
+        D3dSurface = (IntPtr)surface;
         D3dImage = new D3DImage();
         D3dImage.Lock();
-        D3dImage.SetBackBuffer(D3DResourceType.IDirect3DSurface9, (IntPtr)surface);
+        D3dImage.SetBackBuffer(D3DResourceType.IDirect3DSurface9, D3dSurface);
         D3dImage.Unlock();
 
         TranslateTransform = new TranslateTransform(0, FramebufferHeight);
@@ -73,6 +76,8 @@ public unsafe class Framebuffer : FramebufferBase
         GL.DeleteRenderbuffer(GLDepthRenderBufferHandle);
         GL.DeleteTexture(GLSharedTextureHandle);
         Wgl.DXUnregisterObjectNV(Context.GlDeviceHandle, DxInteropRegisteredHandle);
+
+        base.Dispose();
 
         GC.SuppressFinalize(this);
     }
